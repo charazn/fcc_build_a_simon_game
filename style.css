@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css?family=Italiana');
+@import url('https://fonts.googleapis.com/css?family=Tangerine');
+
+body {
+  background-color: #333;
+  color: white;
+  font-size: 16px;
+  font-family: "Italiana", "Tangerine", "Times New Roman", Times, serif;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.container {
+  position: relative;
+  width: 460px;
+  margin: 0 auto;
+}
+
+.back {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  z-index: 0;
+  background-color: black;
+  border-radius: 50%; /* or 230px */
+}
+
+.quadrant {
+  width: 200px;
+  height: 200px;
+  float: left;
+  z-index: 1;
+  /*margin: 10px;*/
+  opacity: 0.6;
+}
+
+#green {
+  margin: 20px 10px 10px 20px;
+  border-top-left-radius: 100%; /* or 200px */
+  background-color: green;
+}
+
+#red {
+  margin: 20px 20px 10px 10px;
+  float: left;
+  border-top-right-radius: 100%; /* or 200px */
+  background-color: red;
+  clear: right;
+}
+
+#yellow {
+  margin: 10px 10px 20px 20px;
+  float: left;
+  border-bottom-left-radius: 100%; /* or 200px */
+  background-color: yellow;
+  clear: left;
+}
+
+#blue {
+  margin: 10px 20px 20px 10px;
+  float: left;
+  border-bottom-right-radius: 100%; /* or 200px */
+  background-color: blue;
+}
+
+.panel {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 240px;
+  height: 240px;
+  border: 10px solid black;
+  border-radius: 50%;  /* 100px */
+  background: #ebebeb; /* #fafafa */
+  z-index: 10;
+  color: black;
+}
+
+.name {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #333;
+  margin-top: 2rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.display {
+  width: 100px;
+}
+
+.display_screen {
+  width: 80px;
+  height: 50px;
+  background-color: #32050C;
+  margin: 0 auto;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.count {
+  color: #660000;
+  font-weight: 900;
+  padding: 0 0 7px 0;
+}
+
+.display_word {
+  margin-top: 5px;
+  font-weight: 900;
+}
+
+.start, .strict {
+  width: 60px;
+}
+
+.start_button, .strict_button {
+  width: 30px;
+  height: 30px;
+  margin: 5px auto 0 auto;
+  border: 5px solid #333;
+  border-radius: 50%;
+}
+
+.start_button {
+  background-color: crimson;
+}
+
+.strict_button {
+  background-color: yellow;
+}
+
+.strict_on {
+  font-size: 0.75rem;
+  margin-top: 8px;
+  font-weight: 900;
+}
+
+.start_word, .strict_word {
+  margin-top: 10px;
+  font-weight: 900;
+}
+
+.on_off_switch {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+}
+
+.off {
+  margin-right: 5px;
+}
+
+.on {
+  margin-left: 5px;
+}
+
+.switch_box {
+  display: inline-block;
+  width: 49px;
+  height: 24px;
+  background-color: black;
+  border-radius: 2px;
+}
+
+.slider_off, .slider_on {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #7EC0EE;
+  border-radius: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.slider_off {
+  margin-left: 2px;
+}
+
+.slider_on {
+  margin-right: 2px;
+}
