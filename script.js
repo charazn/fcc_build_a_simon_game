@@ -40,8 +40,7 @@ $(document).ready(function() {
     window.clearTimeout(w);
   }
 
-  function restart() {
-    reset();
+  function slider_on() {
     on = true;
     $('.slider_off').css('background-color', 'black');
     $('.slider_on').css('background-color', '#7EC0EE');
@@ -52,15 +51,17 @@ $(document).ready(function() {
     $('.strict_on').text('OFF');
   }
 
+  function restart() {
+    reset();
+    slider_on();
+  }
+
   function strict_restart() {
     reset();
-    on = true;
     start = true;
     strict = true;
     turn = 'computer';
-    $('.slider_off').css('background-color', 'black');
-    $('.slider_on').css('background-color', '#7EC0EE');
-    $('.count').css('color', 'crimson');
+    slider_on();
     $('.start_button').css('background-color', 'crimson');
     $('.start_word').text('STOP');
     $('.strict_button').css('background-color', 'yellow');
@@ -99,15 +100,23 @@ $(document).ready(function() {
     }
   }
 
+  function check_player_choice_with_computer() {
+    if (player_count <= computer_count) {
+      player_choices_check = true;
+      if (player_arr[player_count-1] !== computer_arr[player_count-1]) {
+        player_choices_check = false;
+      } else {
+        $('audio.'+player_arr[player_count-1]+'_sound')[0].play();
+        $('#'+player_arr[player_count-1]).css('opacity', '0.9');
+        k = setTimeout(function() {
+          $('#'+player_arr[player_count-1]).css('opacity', '0.6');
+        }, 500);
+      }
+    }
+  }
+
   $('.slider_on').click(function() {
-    $('.slider_off').css('background-color', 'black');
-    $('.slider_on').css('background-color', '#7EC0EE');
-    $('.count').css('color', 'crimson');
-    on = true;
-    $('.start_button').css('background-color', 'green');
-    $('.start_word').text('START');
-    $('.strict_button').css('background-color', 'orange');
-    $('.strict_on').text('OFF');
+    slider_on();
   });
 
   $('.slider_off').click(function() {
@@ -142,272 +151,81 @@ $(document).ready(function() {
     }
   });
 
-  function check_player_choice_with_computer() {
-    if (player_count <= computer_count) {
-      player_choices_check = true;
-      if (player_arr[player_count-1] !== computer_arr[player_count-1]) {
-        player_choices_check = false;
-      } else {
-        $('audio.'+player_arr[player_count-1]+'_sound')[0].play();
-        $('#'+player_arr[player_count-1]).css('opacity', '0.9');
+  function when_clicked(kolor) {
+    if (on && start && turn === 'player') {
+      $('#'+kolor).css('opacity', '0.9');
+      k = setTimeout(function() {
+        $('#'+kolor).css('opacity', '0.6');
+      }, 500);
+      if (strict) {
         k = setTimeout(function() {
-          $('#'+player_arr[player_count-1]).css('opacity', '0.6');
+          $('#'+kolor).css('opacity', '0.6');
         }, 500);
+      }
+      player_count += 1;
+      player_arr.push(kolor);
+      check_player_choice_with_computer();
+
+      if (!player_choices_check) {
+        $('audio.error_sound')[0].play();
+        $('.count').text('ERR');
+        if (strict) {
+          $('.count').text('ERR');
+        }
+        player_arr = [];
+        if (strict) {
+          r = setTimeout(function() {
+            strict_restart();
+          }, 2000);
+        } else {
+          r = setTimeout(function() {
+            $('.count').text('RE');
+          }, 1000);
+          r = setTimeout(function() {
+            $('.count').text('TRY');
+          }, 1500);
+          r = setTimeout(function() {
+            $('.count').text(computer_count);
+            player_count = 0;
+            z = 0;
+            turn = 'computer';
+            loop();
+          }, 3500);
+        }
+      } else if (player_choices_check && player_count === computer_count) {
+        if (player_count === 20) {
+          $('audio.success_sound')[0].play();
+          w = setTimeout(function() {
+            $('.count').text('YOU');
+          }, 500);
+          w = setTimeout(function() {
+            $('.count').text('WIN');
+          }, 1500);
+          r = setTimeout(function() {
+            restart();
+          }, 5000);
+        } else {
+          $('audio.'+kolor+'_sound')[0].play();
+          turn = 'computer';
+          player_count = 0;
+          player_arr = [];
+          c = setTimeout(computer_turn, 2000);
+        }
       }
     }
   }
 
   $('#green').click(function() {
-    if (on && start && turn === 'player') {
-      $('#green').css('opacity', '0.9');
-      k = setTimeout(function() {
-        $('#green').css('opacity', '0.6');
-      }, 500);
-      if (strict) {
-        k = setTimeout(function() {
-          $('#green').css('opacity', '0.6');
-        }, 500);
-      }
-      player_count += 1;
-      player_arr.push('green');
-      check_player_choice_with_computer();
-
-      if (!player_choices_check) {
-        $('audio.error_sound')[0].play();
-        $('.count').text('ERR');
-        if (strict) {
-          $('.count').text('ERR');
-        }
-        player_arr = [];
-        if (strict) {
-          r = setTimeout(function() {
-            strict_restart();
-          }, 2000);
-        } else {
-          r = setTimeout(function() {
-            $('.count').text('RE');
-          }, 1000);
-          r = setTimeout(function() {
-            $('.count').text('TRY');
-          }, 1500);
-          r = setTimeout(function() {
-            $('.count').text(computer_count);
-            player_count = 0;
-            z = 0;
-            turn = 'computer';
-            loop();
-          }, 3500);
-        }
-      } else if (player_choices_check && player_count === computer_count) {
-        if (player_count === 20) {
-          $('audio.success_sound')[0].play();
-          w = setTimeout(function() {
-            $('.count').text('YOU');
-          }, 500);
-          w = setTimeout(function() {
-            $('.count').text('WIN');
-          }, 1500);
-          r = setTimeout(function() {
-            restart();
-          }, 5000);
-        } else {
-          $('audio.green_sound')[0].play();
-          turn = 'computer';
-          player_count = 0;
-          player_arr = [];
-          c = setTimeout(computer_turn, 2000);
-        }
-      }
-    }
+    when_clicked('green');
   });
-
   $('#red').click(function() {
-    if (on && start && turn === 'player') {
-      $('#red').css('opacity', '0.9');
-      k = setTimeout(function() {
-        $('#red').css('opacity', '0.6');
-      }, 500);
-      if (strict) {
-        k = setTimeout(function() {
-          $('#red').css('opacity', '0.6');
-        }, 500);
-      }
-      player_count += 1;
-      player_arr.push('red');
-      check_player_choice_with_computer();
-
-      if (!player_choices_check) {
-        $('audio.error_sound')[0].play();
-        $('.count').text('ERR');
-        if (strict) {
-          $('.count').text('ERR');
-        }
-        player_arr = [];
-        if (strict) {
-          r = setTimeout(function() {
-            strict_restart();
-          }, 2000);
-        } else {
-          r = setTimeout(function() {
-            $('.count').text('RE');
-          }, 1000);
-          r = setTimeout(function() {
-            $('.count').text('TRY');
-          }, 1500);
-          r = setTimeout(function() {
-            $('.count').text(computer_count);
-            player_count = 0;
-            z = 0;
-            turn = 'computer';
-            loop();
-          }, 3500);
-        }
-      } else if (player_choices_check && player_count === computer_count) {
-        if (player_count === 20) {
-          $('audio.success_sound')[0].play();
-          w = setTimeout(function() {
-            $('.count').text('YOU');
-          }, 500);
-          w = setTimeout(function() {
-            $('.count').text('WIN');
-          }, 1500);
-          r = setTimeout(function() {
-            restart();
-          }, 5000);
-        } else {
-          $('audio.red_sound')[0].play();
-          turn = 'computer';
-          player_count = 0;
-          player_arr = [];
-          c = setTimeout(computer_turn, 2000);
-        }
-      }
-    }
+    when_clicked('red');
   });
-
   $('#yellow').click(function() {
-    if (on && start && turn === 'player') {
-      $('#yellow').css('opacity', '0.9');
-      k = setTimeout(function() {
-        $('#yellow').css('opacity', '0.6');
-      }, 500);
-      if (strict) {
-        k = setTimeout(function() {
-          $('#yellow').css('opacity', '0.6');
-        }, 500);
-      }
-      player_count += 1;
-      player_arr.push('yellow');
-      check_player_choice_with_computer();
-
-      if (!player_choices_check) {
-        $('audio.error_sound')[0].play();
-        $('.count').text('ERR');
-        if (strict) {
-          $('.count').text('ERR');
-        }
-        player_arr = [];
-        if (strict) {
-          k = setTimeout(function() {
-            strict_restart();
-          }, 2000);
-        } else {
-          r = setTimeout(function() {
-            $('.count').text('RE');
-          }, 1000);
-          r = setTimeout(function() {
-            $('.count').text('TRY');
-          }, 1500);
-          r = setTimeout(function() {
-            $('.count').text(computer_count);
-            player_count = 0;
-            z = 0;
-            turn = 'computer';
-            loop();
-          }, 3500);
-        }
-      } else if (player_choices_check && player_count === computer_count) {
-        if (player_count === 20) {
-          $('audio.success_sound')[0].play();
-          w = setTimeout(function() {
-            $('.count').text('YOU');
-          }, 500);
-          w = setTimeout(function() {
-            $('.count').text('WIN');
-          }, 1500);
-          r = setTimeout(function() {
-            restart();
-          }, 5000);
-        } else {
-          $('audio.yellow_sound')[0].play();
-          turn = 'computer';
-          player_count = 0;
-          player_arr = [];
-          c = setTimeout(computer_turn, 2000);
-        }
-      }
-    }
+    when_clicked('yellow');
   });
-
   $('#blue').click(function() {
-    if (on && start && turn === 'player') {
-      $('#blue').css('opacity', '0.9');
-      k = setTimeout(function() {
-        $('#blue').css('opacity', '0.6');
-      }, 500);
-      if (strict) {
-        k = setTimeout(function() {
-          $('#blue').css('opacity', '0.6');
-        }, 500);
-      }
-      player_count += 1;
-      player_arr.push('blue');
-      check_player_choice_with_computer();
-
-      if (!player_choices_check) {
-        $('.count').text('ERR');
-        $('audio.error_sound')[0].play();
-        player_arr = [];
-        if (strict) {
-          r = setTimeout(function() {
-            strict_restart();
-          }, 2000);
-        } else {
-          r = setTimeout(function() {
-            $('.count').text('RE');
-          }, 1000);
-          r = setTimeout(function() {
-            $('.count').text('TRY');
-          }, 1500);
-          r = setTimeout(function() {
-            $('.count').text(computer_count);
-            player_count = 0;
-            z = 0;
-            turn = 'computer';
-            loop();
-          }, 3500);
-        }
-      } else if (player_choices_check && player_count === computer_count) {
-        if (player_count === 20) {
-          $('audio.success_sound')[0].play();
-          w = setTimeout(function() {
-            $('.count').text('YOU');
-          }, 500);
-          w = setTimeout(function() {
-            $('.count').text('WIN');
-          }, 1500);
-          r = setTimeout(function() {
-            restart();
-          }, 5000);
-        } else {
-          $('audio.blue_sound')[0].play();
-          turn = 'computer';
-          player_count = 0;
-          player_arr = [];
-          c = setTimeout(computer_turn, 2000);
-        }
-      }
-    }
+    when_clicked('blue');
   });
 
 });
